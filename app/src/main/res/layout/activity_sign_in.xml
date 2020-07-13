@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorMainDark"
+    tools:context=".page.SignInActivity">
+
+    <com.shobhitpuri.custombuttons.GoogleSignInButton
+        android:id="@+id/gsibtn_asi_sign_in"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_margin="32dp"
+        android:text="Sign in with Google"
+        app:isDarkTheme="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="HardcodedText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
