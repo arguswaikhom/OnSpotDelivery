@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/bottom_nav_height"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".page.NotificationsFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbar_fn_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <include
+        android:id="@+id/include_fn_info_no_activity"
+        layout="@layout/info_no_activity"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_fn_notifications"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
