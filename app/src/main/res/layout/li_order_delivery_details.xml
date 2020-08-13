@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/tv_lodd_order_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="12 Dec 2019 - 12:35 PM" />
+
+                <ImageButton
+                    android:id="@+id/ibtn_lodd_more"
+                    style="?android:attr/actionOverflowButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View style="@style/VerticalDivider" />
+
+            <com.crown.library.onspotlibrary.views.OrderItemView
+                android:id="@+id/oiv_lodd_order_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View style="@style/VerticalDivider" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/tv_lodd_total_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="8 items" />
+
+                <TextView
+                    android:id="@+id/tv_lodd_total_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    tools:text="₹ 250" />
+            </RelativeLayout>
+
+            <View style="@style/VerticalDivider" />
+
+            <include
+                layout="@layout/iv_delivery_path"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <View style="@style/VerticalDivider" />
+
+            <Button
+                android:id="@+id/btn_lodd_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Navigation" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</ScrollView>

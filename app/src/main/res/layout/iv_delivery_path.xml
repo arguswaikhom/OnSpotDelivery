@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_idp_osd_to_osb_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ps_idp_osb"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ps_idp_osd"
+        tools:text="1.50 KM" />
+
+    <TextView
+        android:id="@+id/tv_idp_osb_to_os_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ps_idp_os"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_idp_osd_to_osb"
+        tools:text="1.50 KM" />
+
+    <com.crown.library.onspotlibrary.views.PathSpot
+        android:id="@+id/ps_idp_osd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bgTint="@color/colorSecondaryAccent"
+        app:iconTint="@color/grey_5"
+        app:layout_constraintStart_toEndOf="@+id/tv_idp_osd_to_osb_distance"
+        app:layout_constraintTop_toTopOf="parent"
+        app:src="@drawable/ic_round_adjust_24" />
+
+    <View
+        android:id="@+id/v_idp_osd_to_osb"
+        android:layout_width="1dp"
+        android:layout_height="40dp"
+        android:background="@color/colorSecondaryAccent"
+        app:layout_constraintEnd_toEndOf="@+id/ps_idp_osd"
+        app:layout_constraintStart_toStartOf="@+id/ps_idp_osd"
+        app:layout_constraintTop_toBottomOf="@+id/ps_idp_osd" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="You"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/ps_idp_osd"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.crown.library.onspotlibrary.views.PathSpot
+        android:id="@+id/ps_idp_osb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bgTint="@color/colorSecondaryAccent"
+        app:iconTint="@color/grey_5"
+        app:layout_constraintEnd_toEndOf="@+id/ps_idp_osd"
+        app:layout_constraintStart_toEndOf="@+id/tv_idp_osd_to_osb_distance"
+        app:layout_constraintTop_toBottomOf="@+id/v_idp_osd_to_osb"
+        app:src="@drawable/ic_round_business_24" />
+
+    <View
+        android:id="@+id/ps_idp_osb_to_os"
+        android:layout_width="1dp"
+        android:layout_height="40dp"
+        android:background="@color/colorSecondaryAccent"
+        app:layout_constraintEnd_toEndOf="@+id/ps_idp_osb"
+        app:layout_constraintStart_toEndOf="@+id/tv_idp_osb_to_os_distance"
+        app:layout_constraintStart_toStartOf="@+id/ps_idp_osb"
+        app:layout_constraintTop_toBottomOf="@+id/ps_idp_osb" />
+
+    <TextView
+        android:id="@+id/tv_idp_osb_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/iv_idp_osb_call"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ps_idp_osb"
+        app:layout_constraintTop_toBottomOf="@+id/v_idp_osd_to_osb"
+        tools:text="Barriers and Groups." />
+
+    <TextView
+        android:id="@+id/tv_idp_osb_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="2"
+        android:textSize="12sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/iv_idp_osb_call"
+        app:layout_constraintStart_toStartOf="@+id/tv_idp_osb_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_idp_osb_name"
+        tools:text="If you don't want to have nested layouts,you don't want to have nested layouts, use Barriers and Groups. It is a difficult task that can waste many hours." />
+
+    <ImageView
+        android:id="@+id/iv_idp_osb_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_round_call_24"
+        android:tint="@color/colorSecondaryAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_idp_osd_to_osb" />
+
+
+    <com.crown.library.onspotlibrary.views.PathSpot
+        android:id="@+id/ps_idp_os"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bgTint="@color/colorSecondaryAccent"
+        app:iconTint="@color/grey_5"
+        app:layout_constraintEnd_toEndOf="@+id/ps_idp_osb"
+        app:layout_constraintStart_toStartOf="@+id/ps_idp_osb"
+        app:layout_constraintTop_toBottomOf="@+id/ps_idp_osb_to_os"
+        app:src="@drawable/ic_round_account_circle_24" />
+
+    <TextView
+        android:id="@+id/tv_idp_os_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/iv_idp_os_call"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ps_idp_os"
+        app:layout_constraintTop_toBottomOf="@+id/ps_idp_osb_to_os"
+        tools:text="Barriers and Groups. It is a difficult task that can waste many hours.t want to  many hours." />
+
+    <TextView
+        android:id="@+id/tv_idp_os_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="2"
+        android:textSize="12sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/iv_idp_os_call"
+        app:layout_constraintStart_toStartOf="@+id/tv_idp_os_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_idp_os_name"
+        tools:text="If you don't want to have nested layouts,you don't want to have nested layouts, use Barriers and Groups. It is a difficult task that can waste many hours." />
+
+    <ImageView
+        android:id="@+id/iv_idp_os_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_round_call_24"
+        android:tint="@color/colorSecondaryAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ps_idp_osb_to_os" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
