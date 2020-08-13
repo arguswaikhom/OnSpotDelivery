@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_mod_open_destination"
+        android:title="Open destination" />
+    <item
+        android:id="@+id/action_mod_cancel_delivery"
+        android:title="Cancel delivery" />
+    <item
+        android:id="@+id/action_mod_order_delivered"
+        android:title="Order delivered" />
+</menu>
