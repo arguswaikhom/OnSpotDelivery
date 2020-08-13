@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +17,7 @@ import com.crown.library.onspotlibrary.model.ListItem;
 import com.crown.library.onspotlibrary.model.business.BusinessV2;
 import com.crown.library.onspotlibrary.utils.OSBroadcastReceiver;
 import com.crown.library.onspotlibrary.utils.callback.OnReceiveOSBroadcasts;
+import com.crown.library.onspotlibrary.views.OSSearchView;
 import com.crown.onspotdelivery.R;
 import com.crown.onspotdelivery.view.ListItemAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,6 +42,8 @@ public class AddBusinessActivity extends AppCompatActivity implements OnReceiveO
 
     @BindView(R.id.pbar_aab_loading)
     ProgressBar mLoadingPBar;
+    @BindView(R.id.sv_aab_search)
+    OSSearchView mSearchSV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,7 @@ public class AddBusinessActivity extends AppCompatActivity implements OnReceiveO
         mBroadcastReceiver = new OSBroadcastReceiver(this);
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(getString(R.string.action_osd_changes));
+        mSearchSV.getField().addTextChangedListener(mSearchFieldWatcher);
 
         setUpRecycler();
         loadDataset();
@@ -64,6 +72,23 @@ public class AddBusinessActivity extends AppCompatActivity implements OnReceiveO
         unregisterReceiver(mBroadcastReceiver);
     }
 
+    private TextWatcher mSearchFieldWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            mAdapter.getFilter().filter(s);
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
     private void setUpRecycler() {
         mRecyclerView = findViewById(R.id.rv_aab_business_list);
         mRecyclerView.setHasFixedSize(true);
@@ -77,6 +102,7 @@ public class AddBusinessActivity extends AppCompatActivity implements OnReceiveO
     }
 
     private void loadDataset() {
+        mLoadingPBar.setVisibility(View.VISIBLE);
         String collection = getString(R.string.ref_business);
         FirebaseFirestore.getInstance().collection(collection).get()
                 .addOnSuccessListener(this::onLoadDatasetSuccessful).addOnFailureListener(this::onLoadDatasetFailure);
@@ -84,6 +110,7 @@ public class AddBusinessActivity extends AppCompatActivity implements OnReceiveO
 
     @SuppressWarnings("unchecked")
     private void onLoadDatasetSuccessful(QuerySnapshot queryDocumentSnapshots) {
+        mLoadingPBar.setVisibility(View.GONE);
         if (!queryDocumentSnapshots.isEmpty()) {
             mDataset.clear();
             for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
@@ -95,11 +122,13 @@ public class AddBusinessActivity extends AppCompatActivity implements OnReceiveO
                     mDataset.add(v2);
                 }
             }
+            Collections.sort(mDataset, ((o1, o2) -> ((BusinessV2) o1).getDisplayName().compareTo(((BusinessV2) o2).getDisplayName())));
             mAdapter.notifyDataSetChanged();
         }
     }
 
     private void onLoadDatasetFailure(Exception e) {
+        mLoadingPBar.setVisibility(View.GONE);
 
     }
 

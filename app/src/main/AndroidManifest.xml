@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".controller.AppController"
@@ -19,6 +21,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Material.NoActionBar">
+        <activity
+            android:name=".page.OrderDetailsActivity"
+            android:theme="@style/DialogActivity.NoActionBar" />
+        <activity
+            android:name=".page.AddBusinessActivity"
+            android:theme="@style/Material.NoActionBar.GreyStatusBar" />
+        <activity
+            android:name=".page.MainActivity"
+            android:label="@string/app_name" />
         <activity android:name=".page.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,17 +37,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".page.AddBusinessActivity"
-            android:theme="@style/Material.NoActionBar.GreyStatusBar" />
-        <activity
-            android:name=".page.MainActivity"
-            android:label="@string/app_name" />
-
-        <!--<receiver android:name="com.crown.library.onspotlibrary.utils.OSBroadcastReceiver">
-            <intent-filter>
-                <action android:name="com.crown.onspotdelivery.USER_UPDATES" />
-            </intent-filter>
-        </receiver>-->
     </application>
 </manifest>

@@ -11,6 +11,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.crown.library.onspotlibrary.controller.OSPreferences;
 import com.crown.library.onspotlibrary.model.user.UserOSD;
+import com.crown.library.onspotlibrary.utils.CreateProfileImage;
 import com.crown.library.onspotlibrary.utils.emun.OSPreferenceKey;
 import com.crown.onspotdelivery.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,8 +38,16 @@ public class MainActivity extends AppCompatActivity implements EventListener<Doc
 
         UserOSD user = OSPreferences.getInstance(getApplicationContext()).getObject(OSPreferenceKey.USER, UserOSD.class);
         mUserChangeListener = FirebaseFirestore.getInstance().collection(getString(R.string.ref_user)).document(user.getUserId()).addSnapshotListener(this);
+        // todo: check for the current token first
         if (user.getDeviceTokenOSD() == null || user.getDeviceTokenOSD().isEmpty()) {
             FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> FirebaseFirestore.getInstance().collection(getString(R.string.ref_user)).document(user.getUserId()).update(getString(R.string.field_device_token_osd), FieldValue.arrayUnion(instanceIdResult.getToken())));
+        }
+
+        try {
+            if (!user.getProfileImageUrl().contains(user.getUserId()))
+                new CreateProfileImage(getApplicationContext()).execute(user.getUserId(), user.getProfileImageUrl());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
