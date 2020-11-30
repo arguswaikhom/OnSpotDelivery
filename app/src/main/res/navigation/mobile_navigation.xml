@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.crown.onspotdelivery.page.CurrentOrderFragment"
+        android:name="com.crown.onspotdelivery.page.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_current_order" />
+        tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.crown.onspotdelivery.page.DeliveryHistoryFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_delivery_history" />
-
-    <fragment
+    <!--<fragment
         android:id="@+id/navigation_notifications"
         android:name="com.crown.onspotdelivery.page.NotificationsFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_notifications" />-->
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.crown.onspotdelivery.page.ProfileFragment"
+        android:label="@string/header_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

@@ -1,6 +1,8 @@
 package com.crown.onspotdelivery.controller;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -11,10 +13,14 @@ import com.crown.library.onspotlibrary.controller.OSPreferences;
 import com.crown.library.onspotlibrary.model.user.UserOSD;
 import com.crown.library.onspotlibrary.utils.emun.OSPreferenceKey;
 import com.crown.onspotdelivery.R;
+import com.crown.onspotdelivery.page.SignInActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.io.IOException;
 
 public class AppController extends Application {
     public static final String TAG = AppController.class.getName();
@@ -31,6 +37,7 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        OSPreferences.getInstance(this).setObject(getString(R.string.package_onspot_delivery), OSPreferenceKey.APP_PACKAGE);
     }
 
     public RequestQueue getRequestQueue() {
@@ -81,26 +88,15 @@ public class AppController extends Application {
     public boolean isAuthenticated() {
         FirebaseAuth auth = getFirebaseAuth();
         UserOSD user = OSPreferences.getInstance(getApplicationContext()).getObject(OSPreferenceKey.USER, UserOSD.class);
-        return auth != null && auth.getUid() != null && !auth.getUid().isEmpty() && auth.getCurrentUser() != null && user != null;
+        return auth != null && auth.getUid() != null && !auth.getUid().isEmpty() && auth.getCurrentUser() != null && user != null && !TextUtils.isEmpty(user.getUserId());
     }
 
-    /*public void signOut(Activity activity) {
-        Preferences preferences = Preferences.getInstance(getApplicationContext());
-        String token = preferences.getObject(PreferenceKey.DEVICE_TOKEN, String.class);
-        User user = Preferences.getInstance(getApplicationContext()).getObject(PreferenceKey.USER, User.class);
-
-        if (token != null && user != null) {
-            FirebaseFirestore.getInstance().collection(getString(R.string.ref_user)).document(user.getUserId()).update(getString(R.string.field_device_token), FieldValue.arrayRemove(token));
-        }
-        clearContent(activity);
-    }
-
-    private void clearContent(Activity activity) {
+    public void signOut(Activity activity) {
         getFirebaseAuth().signOut();
         getGoogleSignInClient().signOut();
         setFirebaseAuth(null);
         setGoogleSignInClient(null);
-        Preferences.getInstance(getApplicationContext()).clearAll();
+        OSPreferences.getInstance(getApplicationContext()).clearAll();
         getRequestQueue().getCache().clear();
         // ClearCacheData.clear(this);
 
@@ -114,5 +110,5 @@ public class AppController extends Application {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
         activity.finish();
-    }*/
+    }
 }
