@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,9 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.crown.library.onspotlibrary.model.ListItem;
 import com.crown.library.onspotlibrary.model.business.BusinessV2;
 import com.crown.library.onspotlibrary.utils.OSBroadcastReceiver;
+import com.crown.library.onspotlibrary.utils.OSListUtils;
+import com.crown.library.onspotlibrary.utils.OSMessage;
+import com.crown.library.onspotlibrary.utils.OSString;
 import com.crown.library.onspotlibrary.utils.callback.OnReceiveOSBroadcasts;
-import com.crown.library.onspotlibrary.views.OSSearchView;
 import com.crown.onspotdelivery.R;
+import com.crown.onspotdelivery.databinding.ActivityAddBusinessBinding;
 import com.crown.onspotdelivery.view.ListItemAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,9 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
+// todo: implement unsupported list item
+// todo: accepted request doesn't show up in the UI; send a request -> hide window -> accept request -> revisit this page -> accepted won't show up
 public class AddBusinessActivity extends AppCompatActivity implements OnReceiveOSBroadcasts {
 
     private static final String TAG = AddBusinessActivity.class.getName();
@@ -38,23 +39,19 @@ public class AddBusinessActivity extends AppCompatActivity implements OnReceiveO
     private ListItemAdapter mAdapter;
     private IntentFilter mIntentFilter;
     private RecyclerView mRecyclerView;
+    private ActivityAddBusinessBinding binding;
     private OSBroadcastReceiver mBroadcastReceiver;
-
-    @BindView(R.id.pbar_aab_loading)
-    ProgressBar mLoadingPBar;
-    @BindView(R.id.sv_aab_search)
-    OSSearchView mSearchSV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_business);
-        ButterKnife.bind(this);
+        binding = ActivityAddBusinessBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         mBroadcastReceiver = new OSBroadcastReceiver(this);
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(getString(R.string.action_osd_changes));
-        mSearchSV.getField().addTextChangedListener(mSearchFieldWatcher);
+        binding.svAabSearch.getField().addTextChangedListener(mSearchFieldWatcher);
 
         setUpRecycler();
         loadDataset();
@@ -102,34 +99,38 @@ public class AddBusinessActivity extends AppCompatActivity implements OnReceiveO
     }
 
     private void loadDataset() {
-        mLoadingPBar.setVisibility(View.VISIBLE);
-        String collection = getString(R.string.ref_business);
-        FirebaseFirestore.getInstance().collection(collection).get()
+        binding.pbarAabLoading.setVisibility(View.VISIBLE);
+        FirebaseFirestore.getInstance().collection(OSString.refBusiness)
+                .whereEqualTo(OSString.fieldIsActive, true)
+                .whereEqualTo(OSString.fieldAdminBlocked, false)
+                .get()
                 .addOnSuccessListener(this::onLoadDatasetSuccessful).addOnFailureListener(this::onLoadDatasetFailure);
     }
 
     @SuppressWarnings("unchecked")
-    private void onLoadDatasetSuccessful(QuerySnapshot queryDocumentSnapshots) {
-        mLoadingPBar.setVisibility(View.GONE);
-        if (!queryDocumentSnapshots.isEmpty()) {
+    private void onLoadDatasetSuccessful(QuerySnapshot snapshots) {
+        binding.pbarAabLoading.setVisibility(View.GONE);
+        if (snapshots != null && !snapshots.isEmpty()) {
             mDataset.clear();
-            for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+            for (DocumentSnapshot doc : snapshots.getDocuments()) {
                 if (doc.exists()) {
                     BusinessV2 v2 = doc.toObject(BusinessV2.class);
                     if (v2 == null) continue;
                     ArrayList<String> imageUrls = (ArrayList<String>) doc.get(getString(R.string.field_image_urls));
-                    v2.setImageUrl(imageUrls == null || imageUrls.isEmpty() ? "" : imageUrls.get(0));
+                    v2.setImageUrl(OSListUtils.isEmpty(imageUrls) ? "" : imageUrls.get(0));
                     mDataset.add(v2);
                 }
             }
             Collections.sort(mDataset, ((o1, o2) -> ((BusinessV2) o1).getDisplayName().compareTo(((BusinessV2) o2).getDisplayName())));
             mAdapter.notifyDataSetChanged();
+        } else {
+            OSMessage.showSToast(this, "No business found");
         }
     }
 
     private void onLoadDatasetFailure(Exception e) {
-        mLoadingPBar.setVisibility(View.GONE);
-
+        binding.pbarAabLoading.setVisibility(View.GONE);
+        OSMessage.showSToast(this, getString(R.string.msg_something_went_wrong));
     }
 
     @Override

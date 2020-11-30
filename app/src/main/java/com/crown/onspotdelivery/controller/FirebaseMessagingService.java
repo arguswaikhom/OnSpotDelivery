@@ -2,8 +2,9 @@ package com.crown.onspotdelivery.controller;
 
 import com.crown.library.onspotlibrary.controller.OSPreferences;
 import com.crown.library.onspotlibrary.model.user.UserOSD;
+import com.crown.library.onspotlibrary.utils.OSListUtils;
+import com.crown.library.onspotlibrary.utils.OSString;
 import com.crown.library.onspotlibrary.utils.emun.OSPreferenceKey;
-import com.crown.onspotdelivery.R;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,6 +28,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private void updateDeviceToken(String token) {
         UserOSD user = OSPreferences.getInstance(getApplicationContext()).getObject(OSPreferenceKey.USER, UserOSD.class);
         if (user == null) return;
-        FirebaseFirestore.getInstance().collection(getString(R.string.ref_user)).document(user.getUserId()).update(getString(R.string.field_device_token_osd), FieldValue.arrayUnion(token));
+        if (OSListUtils.isEmpty(user.getDeviceTokenOSD()) || !user.getDeviceTokenOSD().contains(token)) {
+            FirebaseFirestore.getInstance().collection(OSString.refUser).document(user.getUserId())
+                    .update(OSString.fieldDeviceTokenOSD, FieldValue.arrayUnion(token));
+        }
     }
 }

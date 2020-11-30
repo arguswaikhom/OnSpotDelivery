@@ -2,6 +2,7 @@ package com.crown.onspotdelivery.page;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -11,28 +12,30 @@ import com.crown.library.onspotlibrary.controller.OSGoogleSignIn;
 import com.crown.library.onspotlibrary.controller.OSPreferences;
 import com.crown.library.onspotlibrary.model.user.UserOSD;
 import com.crown.library.onspotlibrary.utils.emun.OSPreferenceKey;
-import com.crown.onspotdelivery.R;
 import com.crown.onspotdelivery.controller.AppController;
+import com.crown.onspotdelivery.databinding.ActivitySignInBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
-
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class SignInActivity extends AppCompatActivity implements OSGoogleSignIn.OnGoogleSignInResponse {
     public static final int RC_SIGN_IN = 0;
     private OSGoogleSignIn mGoogleSignIn;
+    private ActivitySignInBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        if (AppController.getInstance().isAuthenticated()) navHomeActivity();
-        ButterKnife.bind(this);
+        if (AppController.getInstance().isAuthenticated()) {
+            navHomeActivity();
+            return;
+        }
+
+        binding.gsibtnAsiSignIn.setOnClickListener(this::onClickedSignIn);
     }
 
-    @OnClick(R.id.gsibtn_asi_sign_in)
-    void onClickedSignIn() {
+    void onClickedSignIn(View view) {
         AppController controller = AppController.getInstance();
         mGoogleSignIn = new OSGoogleSignIn(this, controller.getGoogleSignInClient(), controller.getFirebaseAuth(), RC_SIGN_IN, this);
         mGoogleSignIn.pickAccount();

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_mod_open_destination"
-        android:title="Open destination" />
+        android:id="@+id/nav_mod_customer_location"
+        android:title="Customer location" />
     <item
         android:id="@+id/action_mod_cancel_delivery"
         android:title="Cancel delivery" />

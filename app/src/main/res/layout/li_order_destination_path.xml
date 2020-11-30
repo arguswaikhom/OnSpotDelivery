@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/status_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/order_status_accepted"
+                android:gravity="center"
+                android:padding="4dp"
+                android:textSize="16sp"
+                tools:text="New Order" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/image_iv"
+                        style="@style/ProfileImage.Medium"
+                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/des_iv_customer_profile"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/customer_name_tv"
+                        style="@style/Text.ListViewHeader"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintStart_toEndOf="@+id/image_iv"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="James Rocks" />
+
+                    <TextView
+                        android:id="@+id/order_time_tv"
+                        style="@style/Text.Min"
+                        app:layout_constraintBottom_toBottomOf="@+id/image_iv"
+                        app:layout_constraintStart_toStartOf="@+id/customer_name_tv"
+                        app:layout_constraintTop_toBottomOf="@+id/customer_name_tv"
+                        tools:text="12:35 PM - 12 Dec 2019" />
+
+                    <ImageButton
+                        android:id="@+id/more_ibtn"
+                        style="?android:attr/actionOverflowButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
+                        android:contentDescription="@string/des_ibtn_more_option"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View style="@style/VerticalDivider" />
+
+                <com.crown.library.onspotlibrary.views.OrderItemView
+                    android:id="@+id/order_item_oiv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View style="@style/VerticalDivider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/total_item_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="8 items" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/total_price_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="@string/text_tv_dummy_price" />
+                </LinearLayout>
+
+                <View style="@style/VerticalDivider" />
+
+                <include
+                    android:id="@+id/path_include"
+                    layout="@layout/iv_destination_path"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <View style="@style/VerticalDivider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/secondary_btn"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/action_btn_order_delivered" />
+
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="0dp" />
+
+                    <Button
+                        android:id="@+id/primary_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/action_btn_show_nav" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</ScrollView>

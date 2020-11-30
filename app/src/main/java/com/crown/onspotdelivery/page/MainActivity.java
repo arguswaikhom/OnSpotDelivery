@@ -12,36 +12,36 @@ import androidx.navigation.ui.NavigationUI;
 import com.crown.library.onspotlibrary.controller.OSPreferences;
 import com.crown.library.onspotlibrary.model.user.UserOSD;
 import com.crown.library.onspotlibrary.utils.CreateProfileImage;
+import com.crown.library.onspotlibrary.utils.OSListUtils;
+import com.crown.library.onspotlibrary.utils.OSString;
 import com.crown.library.onspotlibrary.utils.emun.OSPreferenceKey;
 import com.crown.onspotdelivery.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.crown.onspotdelivery.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
 
     private ListenerRegistration mUserChangeListener;
+    private UserOSD user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupWithNavController(navView, navController);
+        NavigationUI.setupWithNavController(binding.navView, navController);
 
-        UserOSD user = OSPreferences.getInstance(getApplicationContext()).getObject(OSPreferenceKey.USER, UserOSD.class);
+        user = OSPreferences.getInstance(getApplicationContext()).getObject(OSPreferenceKey.USER, UserOSD.class);
         mUserChangeListener = FirebaseFirestore.getInstance().collection(getString(R.string.ref_user)).document(user.getUserId()).addSnapshotListener(this);
-        // todo: check for the current token first
-        if (user.getDeviceTokenOSD() == null || user.getDeviceTokenOSD().isEmpty()) {
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> FirebaseFirestore.getInstance().collection(getString(R.string.ref_user)).document(user.getUserId()).update(getString(R.string.field_device_token_osd), FieldValue.arrayUnion(instanceIdResult.getToken())));
-        }
+
+        verifyDeviceToken();
 
         try {
             if (!user.getProfileImageUrl().contains(user.getUserId()))
@@ -49,6 +49,16 @@ public class MainActivity extends AppCompatActivity implements EventListener<Doc
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void verifyDeviceToken() {
+        if (user == null) return;
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+            if (OSListUtils.isEmpty(user.getDeviceTokenOSD()) || !user.getDeviceTokenOSD().contains(token)) {
+                FirebaseFirestore.getInstance().collection(OSString.refUser).document(user.getUserId())
+                        .update(OSString.fieldDeviceTokenOSD, FieldValue.arrayUnion(token));
+            }
+        });
     }
 
     @Override
@@ -60,13 +70,11 @@ public class MainActivity extends AppCompatActivity implements EventListener<Doc
     @Override
     public void onEvent(@Nullable DocumentSnapshot doc, @Nullable FirebaseFirestoreException e) {
         if (doc != null && doc.exists()) {
-            UserOSD user = doc.toObject(UserOSD.class);
+            user = doc.toObject(UserOSD.class);
             if (user != null) {
                 OSPreferences preferences = OSPreferences.getInstance(getApplicationContext());
                 preferences.setObject(user, OSPreferenceKey.USER);
-
-                Intent intent = new Intent(getString(R.string.action_osd_changes));
-                sendBroadcast(intent);
+                sendBroadcast(new Intent(getString(R.string.action_osd_changes)));
             }
         }
     }
