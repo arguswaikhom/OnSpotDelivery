@@ -2,6 +2,7 @@ package com.crown.onspotdelivery.page;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -11,20 +12,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.crown.library.onspotlibrary.controller.OSGoogleSignIn;
 import com.crown.library.onspotlibrary.controller.OSPreferences;
 import com.crown.library.onspotlibrary.model.user.UserOSD;
+import com.crown.library.onspotlibrary.utils.OSMessage;
+import com.crown.library.onspotlibrary.utils.OSString;
 import com.crown.library.onspotlibrary.utils.emun.OSPreferenceKey;
 import com.crown.onspotdelivery.controller.AppController;
 import com.crown.onspotdelivery.databinding.ActivitySignInBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 public class SignInActivity extends AppCompatActivity implements OSGoogleSignIn.OnGoogleSignInResponse {
     public static final int RC_SIGN_IN = 0;
     private OSGoogleSignIn mGoogleSignIn;
-    private ActivitySignInBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        ActivitySignInBinding binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         if (AppController.getInstance().isAuthenticated()) {
@@ -54,6 +58,14 @@ public class SignInActivity extends AppCompatActivity implements OSGoogleSignIn.
             Toast.makeText(this, "Can't get user details", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // If the user is signing in for the first time, update user doc
+        if (TextUtils.isEmpty(user.getUserId()) || user.getHasOnSpotDeliveryAccount() == null || !user.getHasOnSpotDeliveryAccount()) {
+            user.setUserId(doc.getId());
+            user.setHasOnSpotDeliveryAccount(true);
+            FirebaseFirestore.getInstance().collection(OSString.refUser).document(doc.getId()).set(user, SetOptions.merge());
+        }
+
         OSPreferences preferences = OSPreferences.getInstance(getApplicationContext());
         preferences.setObject(user, OSPreferenceKey.USER);
         navHomeActivity();
@@ -61,7 +73,7 @@ public class SignInActivity extends AppCompatActivity implements OSGoogleSignIn.
 
     @Override
     public void onFailureGoogleSignIn(String response, Exception e) {
-        Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
+        OSMessage.showSToast(this, response);
         if (e != null) e.printStackTrace();
     }
 

@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements EventListener<Doc
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mUserChangeListener.remove();
+        if (mUserChangeListener != null) mUserChangeListener.remove();
     }
 
     @Override
