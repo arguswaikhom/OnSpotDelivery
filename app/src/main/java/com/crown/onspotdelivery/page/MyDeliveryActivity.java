@@ -3,6 +3,7 @@ package com.crown.onspotdelivery.page;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,31 +14,28 @@ import com.crown.library.onspotlibrary.model.ListItem;
 import com.crown.library.onspotlibrary.model.UnSupportedContent;
 import com.crown.library.onspotlibrary.model.order.OSMyDeliveryOrderOSD;
 import com.crown.library.onspotlibrary.model.user.UserOSD;
-import com.crown.library.onspotlibrary.utils.OSMessage;
 import com.crown.library.onspotlibrary.utils.OSString;
 import com.crown.library.onspotlibrary.utils.emun.OSPreferenceKey;
 import com.crown.library.onspotlibrary.utils.emun.OrderStatus;
 import com.crown.library.onspotlibrary.views.LoadingBounceDialog;
 import com.crown.onspotdelivery.BuildConfig;
-import com.crown.onspotdelivery.R;
 import com.crown.onspotdelivery.databinding.ActivityMyDeliveryBinding;
 import com.crown.onspotdelivery.view.ListItemAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// todo: if there is no business partner, display add business partner to start deliver product
 public class MyDeliveryActivity extends AppCompatActivity {
-
     private final String TAG = MyDeliveryActivity.class.getName();
     private UserOSD user;
     private ListItemAdapter adapter;
     private LoadingBounceDialog loadingDialog;
     private ActivityMyDeliveryBinding binding;
-    private List<ListItem> dataset = new ArrayList<>();
+    private final List<ListItem> dataset = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,36 +59,45 @@ public class MyDeliveryActivity extends AppCompatActivity {
                 .whereEqualTo(OSString.fieldStatus, OrderStatus.DELIVERED)
                 .get()
                 .addOnSuccessListener(snapshot -> {
-                    if (snapshot == null) {
-                        OSMessage.showIBar(this, getString(R.string.msg_something_went_wrong));
-                    } else if (snapshot.isEmpty()) {
-                        OSMessage.showIBar(this, getString(R.string.msg_no_date));
-                    } else {
-                        boolean hasUnsupportedContent = false;
-                        UnSupportedContent us = new UnSupportedContent(BuildConfig.VERSION_CODE, BuildConfig.VERSION_NAME, user.getUserId(), this.getPackageName());
-                        for (DocumentSnapshot doc : snapshot.getDocuments()) {
-                            try {
-                                OSMyDeliveryOrderOSD order = doc.toObject(OSMyDeliveryOrderOSD.class);
-                                assert order != null;
-                                order.setOrderId(doc.getId());
-                                dataset.add(order);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                us.addItem(doc);
-                                us.addException(e.toString());
-                                hasUnsupportedContent = true;
-                                Log.d(TAG, "Order id: " + doc.getId());
-                            }
-                        }
-                        if (hasUnsupportedContent) dataset.add(us);
-                        adapter.notifyDataSetChanged();
-                    }
                     loadingDialog.dismiss();
+                    if (snapshot == null || snapshot.isEmpty()) {
+                        handleEmptyDeliveryHistory();
+                        return;
+                    }
+                    showDeliveryHistory(snapshot);
                 })
                 .addOnFailureListener(e -> {
                     loadingDialog.dismiss();
-                    OSMessage.showIBar(this, getString(R.string.msg_failed_to_load));
+                    handleEmptyDeliveryHistory();
                 });
+    }
+
+    private void showDeliveryHistory(@NonNull QuerySnapshot snapshots) {
+        boolean hasUnsupportedContent = false;
+        UnSupportedContent us = new UnSupportedContent(BuildConfig.VERSION_CODE, BuildConfig.VERSION_NAME, user.getUserId(), this.getPackageName());
+        for (DocumentSnapshot doc : snapshots.getDocuments()) {
+            try {
+                OSMyDeliveryOrderOSD order = doc.toObject(OSMyDeliveryOrderOSD.class);
+                assert order != null;
+                order.setOrderId(doc.getId());
+                dataset.add(order);
+            } catch (Exception e) {
+                e.printStackTrace();
+                us.addItem(doc);
+                us.addException(e.toString());
+                hasUnsupportedContent = true;
+                Log.d(TAG, "Order id: " + doc.getId());
+            }
+        }
+        if (hasUnsupportedContent) dataset.add(us);
+        adapter.notifyDataSetChanged();
+
+        if (dataset.isEmpty()) handleEmptyDeliveryHistory();
+    }
+
+    private void handleEmptyDeliveryHistory() {
+        binding.emptyDeliveryHistory.setVisibility(View.VISIBLE);
+        binding.myDeliveryListRv.setVisibility(View.GONE);
     }
 
     @Override

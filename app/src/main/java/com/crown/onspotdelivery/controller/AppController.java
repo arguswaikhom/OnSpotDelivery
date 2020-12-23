@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.crown.library.onspotlibrary.controller.OSPreferences;
 import com.crown.library.onspotlibrary.model.user.UserOSD;
+import com.crown.library.onspotlibrary.utils.OSString;
 import com.crown.library.onspotlibrary.utils.emun.OSPreferenceKey;
 import com.crown.onspotdelivery.R;
 import com.crown.onspotdelivery.page.SignInActivity;
@@ -18,9 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.io.IOException;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class AppController extends Application {
     public static final String TAG = AppController.class.getName();
@@ -37,7 +37,7 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        OSPreferences.getInstance(this).setObject(getString(R.string.package_onspot_delivery), OSPreferenceKey.APP_PACKAGE);
+        OSPreferences.getInstance(this).setObject(OSString.packageOSD, OSPreferenceKey.APP_PACKAGE);
     }
 
     public RequestQueue getRequestQueue() {
@@ -100,11 +100,8 @@ public class AppController extends Application {
         getRequestQueue().getCache().clear();
         // ClearCacheData.clear(this);
 
-        try {
-            FirebaseInstanceId.getInstance().deleteInstanceId();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FirebaseInstallations.getInstance().delete();
+        FirebaseMessaging.getInstance().deleteToken();
 
         Intent intent = new Intent(activity, SignInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

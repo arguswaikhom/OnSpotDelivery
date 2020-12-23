@@ -3,8 +3,6 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-
     <string name="key_api">AIzaSyAvAjaMYJZ69Ky-gP8bsA5Eh8wj4d-iAEM</string>
-
     <string name="btn_send_request">Send Request</string>
 </resources>

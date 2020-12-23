@@ -14,11 +14,25 @@
         android:layout_height="?attr/actionBarSize"
         app:title="@string/title_my_delivery" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/my_delivery_list_rv"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:scrollbars="none"
-        tools:listitem="@layout/li_my_delivery" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/my_delivery_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:scrollbars="none"
+            tools:listitem="@layout/li_my_delivery" />
+
+        <com.crown.library.onspotlibrary.views.OSIllustrationView
+            android:id="@+id/empty_delivery_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            app:illustration="@drawable/ill_takeout_boxes"
+            app:text="No delivery history to display here" />
+    </RelativeLayout>
 </LinearLayout>
