@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements EventListener<Doc
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         user = OSPreferences.getInstance(getApplicationContext()).getObject(OSPreferenceKey.USER, UserOSD.class);
-        mUserChangeListener = FirebaseFirestore.getInstance().collection(getString(R.string.ref_user)).document(user.getUserId()).addSnapshotListener(this);
+        mUserChangeListener = FirebaseFirestore.getInstance().collection(OSString.refUser).document(user.getUserId()).addSnapshotListener(this);
 
         verifyDeviceToken();
 
@@ -78,5 +78,4 @@ public class MainActivity extends AppCompatActivity implements EventListener<Doc
             }
         }
     }
-
 }

@@ -71,8 +71,8 @@ public class NotificationsFragment extends Fragment implements EventListener<Que
 
     private void getNotifications() {
         UserOSD user = OSPreferences.getInstance(getContext().getApplicationContext()).getObject(OSPreferenceKey.USER, UserOSD.class);
-        mNotificationsChangeListener = FirebaseFirestore.getInstance().collection(getString(R.string.ref_notification))
-                .whereArrayContains(getString(R.string.field_account), "osd::" + user.getUserId())
+        mNotificationsChangeListener = FirebaseFirestore.getInstance().collection(OSString.refNotification)
+                .whereArrayContains(OSString.fieldAccount, "osd::" + user.getUserId())
                 .addSnapshotListener(this);
     }
 

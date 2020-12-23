@@ -116,7 +116,7 @@ public class AddBusinessActivity extends AppCompatActivity implements OnReceiveO
                 if (doc.exists()) {
                     BusinessV2 v2 = doc.toObject(BusinessV2.class);
                     if (v2 == null) continue;
-                    ArrayList<String> imageUrls = (ArrayList<String>) doc.get(getString(R.string.field_image_urls));
+                    ArrayList<String> imageUrls = (ArrayList<String>) doc.get(OSString.fieldImageUrls);
                     v2.setImageUrl(OSListUtils.isEmpty(imageUrls) ? "" : imageUrls.get(0));
                     mDataset.add(v2);
                 }

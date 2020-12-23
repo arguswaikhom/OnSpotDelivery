@@ -16,9 +16,9 @@ import com.crown.library.onspotlibrary.model.business.BusinessV0;
 import com.crown.library.onspotlibrary.model.notification.OSDeliveryPartnershipRequest;
 import com.crown.library.onspotlibrary.model.user.UserOSD;
 import com.crown.library.onspotlibrary.utils.OSFirebaseDocUtils;
+import com.crown.library.onspotlibrary.utils.OSString;
 import com.crown.library.onspotlibrary.utils.emun.BusinessRequestStatus;
 import com.crown.library.onspotlibrary.utils.emun.OSPreferenceKey;
-import com.crown.onspotdelivery.R;
 import com.crown.onspotdelivery.databinding.NotiDeliveryPartnershipRequestBinding;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -75,9 +75,9 @@ public class DeliveryPartnershipRequestVH extends RecyclerView.ViewHolder {
         // todo: change with HTTP call
         UserOSD user = OSPreferences.getInstance(context.getApplicationContext()).getObject(OSPreferenceKey.USER, UserOSD.class);
         Map<String, Object> param = new HashMap<>();
-        param.put("businessOSD", FieldValue.arrayRemove(new BusinessOSD(business.getBusinessRefId(), BusinessRequestStatus.PENDING.name())));
+        param.put(OSString.fieldBusinessOSD, FieldValue.arrayRemove(new BusinessOSD(business.getBusinessRefId(), BusinessRequestStatus.PENDING.name())));
 
-        FirebaseFirestore.getInstance().collection(context.getString(R.string.ref_user)).document(user.getUserId()).update(param);
-        FirebaseFirestore.getInstance().collection(context.getString(R.string.ref_notification)).document(request.getId()).delete();
+        FirebaseFirestore.getInstance().collection(OSString.refUser).document(user.getUserId()).update(param);
+        FirebaseFirestore.getInstance().collection(OSString.refNotification).document(request.getId()).delete();
     }
 }
