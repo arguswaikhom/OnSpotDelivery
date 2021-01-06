@@ -157,17 +157,19 @@ public class OrderDetailsActivity extends AppCompatActivity implements PopupMenu
         OSGlideLoader.loadUserProfileImage(getApplicationContext(), order.getCustomer().getUserId(), orderBinding.imageIv);
         orderBinding.orderTimeTv.setText(String.format("%s - %s", OSTimeUtils.getTime(order.getOrderedAt().getSeconds()), OSTimeUtils.getDay(order.getOrderedAt().getSeconds())));
 
-        int totalItems = 0;
         int totalPrice = 0;
         for (OSCartLite cart : order.getItems()) {
             int q = (int) (long) cart.getQuantity();
             double itemFinalPrice = BusinessItemUtils.getFinalPrice(cart.getPrice());
-            totalItems += q;
             totalPrice += q * itemFinalPrice;
             orderBinding.orderItemOiv.addChild(q, cart.getItemName(), (int) itemFinalPrice * q);
         }
 
-        orderBinding.totalItemTv.setText(String.format(Locale.ENGLISH, "%d items", totalItems));
+        if (order.getHodAvailable()) {
+            orderBinding.orderItemOiv.addChild("Delivery charge", (int) (long) order.getShippingCharge());
+        }
+
+        orderBinding.totalItemTv.setText(String.format(Locale.ENGLISH, "%d items", order.getFinalPrice()));
         orderBinding.totalPriceTv.setText(String.format("%s %s", OSString.inrSymbol, totalPrice));
         pathBinding.osbNameTv.setText(order.getBusiness().getDisplayName());
         pathBinding.osbAddressTv.setText(order.getBusiness().getLocation().getAddressLine());

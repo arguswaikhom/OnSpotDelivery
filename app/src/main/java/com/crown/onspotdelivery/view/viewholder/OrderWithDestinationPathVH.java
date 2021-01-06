@@ -206,18 +206,20 @@ public class OrderWithDestinationPathVH extends RecyclerView.ViewHolder implemen
         binding.orderTimeTv.setText(String.format("%s - %s", OSTimeUtils.getTime(order.getOrderedAt().getSeconds()), OSTimeUtils.getDay(order.getOrderedAt().getSeconds())));
 
         int totalItems = 0;
-        int totalPrice = 0;
         binding.orderItemOiv.clear();
         for (OSCartLite cart : order.getItems()) {
             int q = (int) (long) cart.getQuantity();
             double itemFinalPrice = BusinessItemUtils.getFinalPrice(cart.getPrice());
             totalItems += q;
-            totalPrice += q * itemFinalPrice;
             binding.orderItemOiv.addChild(q, cart.getItemName(), (int) itemFinalPrice * q);
         }
 
+        if (order.getHodAvailable()) {
+            binding.orderItemOiv.addChild("Delivery charge", (int) (long) order.getShippingCharge());
+        }
+
         binding.totalItemTv.setText(String.format(Locale.ENGLISH, "%d items", totalItems));
-        binding.totalPriceTv.setText(String.format("%s %s", OSString.inrSymbol, totalPrice));
+        binding.totalPriceTv.setText(String.format("%s %s", OSString.inrSymbol, order.getFinalPrice()));
         pathBinding.osbNameTv.setText(order.getBusiness().getDisplayName());
         pathBinding.osbAddressTv.setText(order.getBusiness().getLocation().getAddressLine());
         pathBinding.osNameTv.setText(order.getCustomer().getDisplayName());

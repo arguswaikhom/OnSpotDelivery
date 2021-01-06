@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -17,7 +18,8 @@ import com.crown.library.onspotlibrary.controller.OSVolley;
 import com.crown.library.onspotlibrary.model.cart.OSCartLite;
 import com.crown.library.onspotlibrary.model.httpresponse.OSHttpResponseV0;
 import com.crown.library.onspotlibrary.model.order.OSOrder;
-import com.crown.library.onspotlibrary.model.user.UserV0;
+import com.crown.library.onspotlibrary.model.user.UserV1;
+import com.crown.library.onspotlibrary.page.PhoneVerificationActivity;
 import com.crown.library.onspotlibrary.utils.BusinessItemUtils;
 import com.crown.library.onspotlibrary.utils.CurrentLocation;
 import com.crown.library.onspotlibrary.utils.OSLocationUtils;
@@ -52,6 +54,12 @@ public class OrderPrimaryVH extends RecyclerView.ViewHolder {
 
     void onClickedAccept(View view) {
         if (order == null) return;
+        UserV1 user = OSPreferences.getInstance(context).getObject(OSPreferenceKey.USER, UserV1.class);
+        if (TextUtils.isEmpty(user.getPhoneNumber())) {
+            context.startActivity(new Intent(context, PhoneVerificationActivity.class));
+            return;
+        }
+
         loadingDialog.show();
         OSVolley.getInstance(context).addToRequestQueue(new StringRequest(Request.Method.POST, OSString.apiAcceptOrderDeliver, response -> {
             loadingDialog.dismiss();
@@ -64,7 +72,6 @@ public class OrderPrimaryVH extends RecyclerView.ViewHolder {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                UserV0 user = OSPreferences.getInstance(context).getObject(OSPreferenceKey.USER, UserV0.class);
                 Map<String, String> param = new HashMap<>();
                 param.put(OSString.fieldUserId, user.getUserId());
                 param.put(OSString.fieldOrderId, order.getOrderId());
@@ -111,17 +118,19 @@ public class OrderPrimaryVH extends RecyclerView.ViewHolder {
         }, null);
 
         int totalItems = 0;
-        int totalPrice = 0;
         binding.orderItemOiv.removeAllViews();
         for (OSCartLite cart : order.getItems()) {
             int q = (int) (long) cart.getQuantity();
             double itemFinalPrice = BusinessItemUtils.getFinalPrice(cart.getPrice());
             totalItems += q;
-            totalPrice += q * itemFinalPrice;
-            binding.orderItemOiv.addChild(q, cart.getItemName(), (int) itemFinalPrice * q);
+            binding.orderItemOiv.addChild(q, cart.getItemName(), (int) itemFinalPrice);
+        }
+
+        if (order.getHodAvailable()) {
+            binding.orderItemOiv.addChild("Delivery charge", (int) (long) order.getShippingCharge());
         }
 
         binding.itemCountTv.setText(String.format(Locale.ENGLISH, "%d items", totalItems));
-        binding.totalPriceTv.setText(String.format("%s %s", context.getString(R.string.inr), totalPrice));
+        binding.totalPriceTv.setText(String.format("%s %s", context.getString(R.string.inr), order.getFinalPrice()));
     }
 }
