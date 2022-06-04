@@ -1,0 +1,114 @@
+{
+  "project_info": {
+    "project_number": "974539191120",
+    "firebase_url": "https://bicrowny-onspotshop-default-rtdb.firebaseio.com",
+    "project_id": "bicrowny-onspotshop",
+    "storage_bucket": "bicrowny-onspotshop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974539191120:android:3f2ae07631da44afcb3255",
+        "android_client_info": {
+          "package_name": "com.crown.onspot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974539191120-nkc1i0plpdvl65ak83tf08lpefnj1t17.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.crown.onspot",
+            "certificate_hash": "4c3529a965dc6b4de64b4503ff2e89dc3b15f280"
+          }
+        },
+        {
+          "client_id": "974539191120-nqvmttoc5kcdg3s8g8onbh7m4uufsd2m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-D-PJbl5OW62T2IUKkJCeArIG7PrQOlE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974539191120-nqvmttoc5kcdg3s8g8onbh7m4uufsd2m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974539191120:android:96b023c4e18fa75ecb3255",
+        "android_client_info": {
+          "package_name": "com.crown.onspotbusiness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974539191120-adftvtcru2eq3mnc104oj5kpgomim2fh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.crown.onspotbusiness",
+            "certificate_hash": "4c3529a965dc6b4de64b4503ff2e89dc3b15f280"
+          }
+        },
+        {
+          "client_id": "974539191120-nqvmttoc5kcdg3s8g8onbh7m4uufsd2m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-D-PJbl5OW62T2IUKkJCeArIG7PrQOlE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974539191120-nqvmttoc5kcdg3s8g8onbh7m4uufsd2m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974539191120:android:4f2b9d5f567d9429cb3255",
+        "android_client_info": {
+          "package_name": "com.crown.onspotdelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974539191120-nqvmttoc5kcdg3s8g8onbh7m4uufsd2m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-D-PJbl5OW62T2IUKkJCeArIG7PrQOlE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974539191120-nqvmttoc5kcdg3s8g8onbh7m4uufsd2m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
